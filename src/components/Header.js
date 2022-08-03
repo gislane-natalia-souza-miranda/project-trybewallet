@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const INITIAL_STATE = {
-  despesa: 0,
   cambio: 'BRL',
 };
 class Header extends Component {
@@ -11,9 +10,20 @@ class Header extends Component {
     ...INITIAL_STATE,
   }
 
+  despesaTotal = () => {
+    const { expenses } = this.props;
+    let somaTotal = 0;
+    expenses.forEach(
+      (expense) => {
+        somaTotal += expense.value * expense.exchangeRates[expense.currency].ask;
+      },
+    );
+    return somaTotal.toFixed(2); // tofixed(2) arrendodamento 2 casa decimais
+  };
+
   render() {
     const { email } = this.props;
-    const { despesa, cambio } = this.state;
+    const { cambio } = this.state;
 
     return (
 
@@ -26,7 +36,9 @@ class Header extends Component {
 
         <div>
           Despesa:
-          <span data-testid="total-field">{ despesa }</span>
+          <span data-testid="total-field">
+            { this.despesaTotal() }
+          </span>
         </div>
 
         <div>
@@ -39,13 +51,14 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({ user, wallet }) => ({
   ...user,
+  ...wallet,
 });
 
 Header.propTypes = {
   email: PropTypes.string.isRequired,
-  // despesa: PropTypes.number.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   // cambio: PropTypes.string.isRequired,
 };
 

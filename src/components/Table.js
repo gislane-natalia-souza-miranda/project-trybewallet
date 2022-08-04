@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-// import { Table } from 'react-bootstrap/Table';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// import Table from 'react-bootstrap';
 
-export default class Table extends Component {
+class Table extends Component {
   render() {
+    const { expenses } = this.props;
     return (
-      <thead>
+      <table border="1">
         Comp Table
+
         <tr>
           <th>Descrição</th>
           <th>Tag</th>
@@ -17,7 +21,33 @@ export default class Table extends Component {
           <th>Moeda de conversão</th>
           <th>Editar/Excluir</th>
         </tr>
-      </thead>
+        { expenses.map((expense) => (
+          <tr key={ expense.id }>
+            <td>{expense.description}</td>
+            <td>{expense.tag}</td>
+            <td>{expense.method}</td>
+            <td>{Number(expense.value).toFixed(2)}</td>
+            <td>Moeda</td>
+            <td>Câmbio utilizado</td>
+            <td>Valor convertido</td>
+            <td>Real</td>
+            <td>Editar/Excluir</td>
+          </tr>
+
+        ))}
+
+      </table>
     );
   }
 }
+
+// buscando as informações do estado global
+const mapStateToProps = ({ wallet }) => ({
+  ...wallet,
+});
+
+Table.propTypes = {
+  expenses: PropTypes.string.isRequired,
+};
+
+export default connect(mapStateToProps, null)(Table);

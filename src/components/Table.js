@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 // import Table from 'react-bootstrap';
 
 class Table extends Component {
+  currencyName = () => {
+
+  }
+
   render() {
     const { expenses } = this.props;
     return (

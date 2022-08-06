@@ -39,8 +39,7 @@ onInputChange = ({ target }) => {
 
  render() {
    const { value, description, currency, method, tag } = this.state;
-   const { expenses, currencies } = this.props;
-   console.log(expenses);
+   const { currencies } = this.props;
 
    return (
      <fieldset>
@@ -133,7 +132,6 @@ WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   updateCurrencies: PropTypes.func.isRequired,
   addDespesa: PropTypes.func.isRequired,
-  expenses: PropTypes.arrayOf.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);

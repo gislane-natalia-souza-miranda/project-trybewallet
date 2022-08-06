@@ -30,7 +30,7 @@ onInputChange = ({ target }) => {
   }
 
   // Ao clicar no botão dispara o email e muda para a pg carteira
-  handleClick = () => {
+  handleClickLogin = () => {
     const { login, history } = this.props;
     const { email } = this.state;
     login(email);
@@ -75,7 +75,7 @@ onInputChange = ({ target }) => {
           type="submit"
           // type="button"
           disabled={ this.isLoginButtonDisabled() }
-          onClick={ this.handleClick }
+          onClick={ this.handleClickLogin }
           data-testid="login-submit-button"
         >
           Entrar

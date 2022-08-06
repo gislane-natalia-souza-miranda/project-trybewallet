@@ -6,6 +6,7 @@ export const UPDATE_CURRENCIES = 'UPDATE_CURRENCIES ';
 export const UPDATE_CURRENCIES_ERROR = 'UPDATE_CURRENCIES ';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const ADD_EXPENSE_ERROR = 'ADD_EXPENSE_ERROR';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -67,3 +68,11 @@ export const updateExchangeRatesActionThunk = (expense) => async (dispatch) => {
     dispatch(addExpenseActionError(err));
   }
 };
+
+// delete uma despesa da tabela
+export const deleteExpenseAction = (id) => ({
+  type: DELETE_EXPENSE,
+  payload: {
+    id,
+  },
+});

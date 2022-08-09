@@ -7,6 +7,8 @@ export const UPDATE_CURRENCIES_ERROR = 'UPDATE_CURRENCIES ';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const ADD_EXPENSE_ERROR = 'ADD_EXPENSE_ERROR';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
+export const EDIT_EXPENSE_INITIAL = 'EDIT_EXPENSE_INITIAL';
+export const EDIT_EXPENSE_FINAL = 'EDIT_EXPENSE_FINAL';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -74,5 +76,21 @@ export const deleteExpenseAction = (id) => ({
   type: DELETE_EXPENSE,
   payload: {
     id,
+  },
+});
+
+//  inicia a edição de uma despesa da tabela
+export const editExpenseInitialAction = (id) => ({
+  type: EDIT_EXPENSE_INITIAL,
+  payload: {
+    id,
+  },
+});
+
+// finaliza a edição de uma despesa da tabela
+export const editExpenseFinalAction = (expensesEdit) => ({
+  type: EDIT_EXPENSE_FINAL,
+  payload: {
+    expensesEdit,
   },
 });

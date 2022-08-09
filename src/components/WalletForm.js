@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { updateCurrenciesActionThunk,
+import { editExpenseFinalAction, updateCurrenciesActionThunk,
   updateExchangeRatesActionThunk } from '../redux/actions';
 
 const INITIAL_STATE = {
@@ -28,18 +28,74 @@ onInputChange = ({ target }) => {
   this.setState({ [name]: value });
 }
 
+// cria o expenseEdit que é um array com as chaves editadas.
+despesasModificadas = () => {
+  const { expenses, idToEdit } = this.props;
+  const { value, description, currency, method, tag } = this.state;
+  const indexExpenseOriginal = expenses.findIndex((expense) => expense.id === idToEdit);
+
+  const expensesEdit = [...expenses];
+  if (value.length && value !== expenses[indexExpenseOriginal].value) {
+    expensesEdit[indexExpenseOriginal] = { ...expensesEdit[indexExpenseOriginal], value };
+  }
+
+  if (description.length && description !== expenses[indexExpenseOriginal].description) {
+    expensesEdit[indexExpenseOriginal] = { ...expensesEdit[indexExpenseOriginal],
+      description };
+  }
+
+  if (currency !== expenses[indexExpenseOriginal].currency) {
+    expensesEdit[indexExpenseOriginal] = { ...expensesEdit[indexExpenseOriginal],
+      currency };
+  }
+
+  if (method !== expenses[indexExpenseOriginal].method) {
+    expensesEdit[indexExpenseOriginal] = { ...expensesEdit[indexExpenseOriginal],
+      method };
+  }
+
+  if (tag !== expenses[indexExpenseOriginal].tag) {
+    expensesEdit[indexExpenseOriginal] = { ...expensesEdit[indexExpenseOriginal], tag };
+  }
+
+  return expensesEdit;
+}
+
 // salvar as informações da despesa no estado global e atualizar a soma de despesas no header
  handleClick = () => {
    const { value, description, currency, method, tag } = this.state;
-   const { addDespesa } = this.props;
-   addDespesa({ value, description, currency, method, tag });
+   const { editor } = this.props;
+
+   if (editor) {
+     const { editDespesaFinal } = this.props;
+
+     const expensesEdit = this.despesasModificadas();
+
+     editDespesaFinal(expensesEdit);
+   } else {
+     const { addDespesa } = this.props;
+     addDespesa({ value, description, currency, method, tag });
+   }
 
    this.setState(INITIAL_STATE);
  }
 
  render() {
    const { value, description, currency, method, tag } = this.state;
-   const { currencies } = this.props;
+   const { currencies, editor } = this.props;
+
+   /*  if (editor) {
+     const { expenses, idToEdit } = this.props;
+     const expenseEdit = expenses.find((expense) => expense.id === idToEdit);
+     console.log('DidMount', expenseEdit);
+     this.setState({
+       value: expenseEdit.value,
+       description: expenseEdit.description,
+       currency: expenseEdit.currency,
+       method: expenseEdit.method,
+       tag: expenseEdit.tag,
+     });
+   } */
 
    return (
      <fieldset>
@@ -109,10 +165,10 @@ onInputChange = ({ target }) => {
        <button
          type="submit"
          onClick={ this.handleClick }
-         data-testid="login-submit-button"
        >
-         Adicionar despesa
+         {editor ? 'Editar despesa' : 'Adicionar despesa'}
        </button>
+
      </fieldset>
    );
  }
@@ -126,12 +182,17 @@ const mapStateToProps = ({ wallet }) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateCurrencies: () => dispatch(updateCurrenciesActionThunk()),
   addDespesa: (expense) => dispatch(updateExchangeRatesActionThunk(expense)),
+  editDespesaFinal: (expensesEdit) => dispatch(editExpenseFinalAction(expensesEdit)),
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   updateCurrencies: PropTypes.func.isRequired,
   addDespesa: PropTypes.func.isRequired,
+  editor: PropTypes.bool.isRequired,
+  expenses: PropTypes.arrayOf.isRequired,
+  idToEdit: PropTypes.number.isRequired,
+  editDespesaFinal: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);

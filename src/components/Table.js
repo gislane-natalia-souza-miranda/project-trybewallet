@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteExpenseAction } from '../redux/actions';
+import { deleteExpenseAction, editExpenseInitialAction } from '../redux/actions';
 // import Table from 'react-bootstrap';
 
 class Table extends Component {
-  // qdo clica no botão exclui a linha
+  // qdo clica no botão 'Excluir', exclui a linha
  handleClick = (id) => {
    const { deleteDespesa } = this.props;
    deleteDespesa(id);
+ }
+
+ // qdo clica no botão 'Editar' habilita edição de despesa
+ handleClickEdit = (id) => {
+   const { editDespesaInicio } = this.props;
+   editDespesaInicio(id);
  }
 
  render() {
@@ -47,7 +53,7 @@ class Table extends Component {
              <td>
                <button
                  type="button"
-                 // onClick={ () => this.handleClick(id) }
+                 onClick={ () => this.handleClickEdit(expense.id) }
                  data-testid="edit-btn"
                >
                  Editar
@@ -75,15 +81,14 @@ const mapStateToProps = ({ wallet }) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  deleteDespesa: (id) => {
-    // console.log('mapDispatchToProps', id);
-    dispatch(deleteExpenseAction(id));
-  },
+  deleteDespesa: (id) => dispatch(deleteExpenseAction(id)),
+  editDespesaInicio: (id) => dispatch(editExpenseInitialAction(id)),
 });
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf.isRequired,
   deleteDespesa: PropTypes.func.isRequired,
+  editDespesaInicio: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);
